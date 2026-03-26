@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "MichaelSoft | Coming Soon",
   description: "MichaelSoft is architecting the next generation of digital infrastructure. A new era is surfacing.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.png",
   },
 };
 
