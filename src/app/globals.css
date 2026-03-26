@@ -37,7 +37,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-on-surface font-body overflow-x-hidden min-h-screen flex flex-col tracking-wider;
+    @apply bg-background text-on-surface font-body overflow-x-hidden min-h-svh flex flex-col tracking-wider;
   }
 }
 
