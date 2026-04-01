@@ -27,7 +27,7 @@ export default function LoginForm({ error: initialError }: { error?: string }) {
     const formData = new FormData(e.currentTarget);
     
     try {
-      const res = await fetch("/api/auth/callback", {
+      const res = await fetch("/api/admin/login", {
         method: "POST",
         body: formData,
         redirect: "manual" // We handle redirect ourselves
@@ -81,7 +81,7 @@ export default function LoginForm({ error: initialError }: { error?: string }) {
           </div>
         )}
 
-        <form className="space-y-4" action="/api/auth/callback" method="POST" onSubmit={handleSubmit}>
+        <form className="space-y-4" action="/api/admin/login" method="POST" onSubmit={handleSubmit}>
            <div className="space-y-2">
             <label className="text-sm font-medium text-[#000000]" htmlFor="email">
               Email address

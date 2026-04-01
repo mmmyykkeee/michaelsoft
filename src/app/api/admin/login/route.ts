@@ -12,9 +12,14 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    
+    // Determine the base URL for redirects (handle subdomain correctly)
+    const reqUrl = new URL(req.url);
+    const origin = reqUrl.origin;
+    const isSubdomain = reqUrl.hostname.startsWith("admin.");
 
     if (!email || !password) {
-      return NextResponse.redirect(new URL("/admin/login?error=MissingCredentials", req.url));
+      return NextResponse.redirect(new URL(isSubdomain ? "/login?error=MissingCredentials" : "/admin/login?error=MissingCredentials", origin));
     }
 
     // Authenticate with Supabase Natively
@@ -25,15 +30,13 @@ export async function POST(req: NextRequest) {
 
     if (error || !data.session) {
       console.error("Login failed:", error?.message);
-      return NextResponse.redirect(new URL("/admin/login?error=InvalidCredentials", req.url));
+      return NextResponse.redirect(new URL(isSubdomain ? "/login?error=InvalidCredentials" : "/admin/login?error=InvalidCredentials", origin));
     }
 
-    // Create a response redirecting to /admin  (or the callback URL if available)
-    const url = new URL("/admin", req.url);
-    const response = NextResponse.redirect(url, { status: 302 });
+    // Create a response redirecting to the main admin entry (correct path based on domain)
+    const response = NextResponse.redirect(new URL(isSubdomain ? "/" : "/admin", origin), { status: 302 });
 
     // Set a session cookie that middleware can read
-    // We set HttpOnly so it's secure. 
     response.cookies.set("sb-admin-session", data.session.access_token, {
       path: "/",
       httpOnly: true,
