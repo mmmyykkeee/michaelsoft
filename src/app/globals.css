@@ -43,7 +43,7 @@
 
 /* --- Atmospheric Background --- */
 .nebula-bg {
-  @apply fixed inset-0 z-[-1] overflow-hidden;
+  @apply fixed inset-0 z-[-1] overflow-hidden pointer-events-none;
   background-image: 
     linear-gradient(rgba(10, 15, 19, 0.9), rgba(10, 15, 19, 0.95)),
     url('/michaelsoft_bg_new.png');
