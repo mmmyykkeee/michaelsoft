@@ -2,6 +2,22 @@
 
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
+import { 
+  DndContext, 
+  closestCenter, 
+  KeyboardSensor, 
+  PointerSensor, 
+  useSensor, 
+  useSensors, 
+  DragEndEvent 
+} from "@dnd-kit/core";
+import { 
+  arrayMove, 
+  SortableContext, 
+  sortableKeyboardCoordinates, 
+  verticalListSortingStrategy 
+} from "@dnd-kit/sortable";
+import { SortableProjectCard } from "@/components/SortableProjectCard";
 
 interface Project {
   id?: number;
@@ -11,6 +27,7 @@ interface Project {
   technologies: string;
   thumbnail: string | null;
   featured: boolean;
+  display_order?: number;
 }
 
 const FALLBACK_TECHS = [
@@ -89,6 +106,8 @@ export default function AdminPage() {
     const { data, error } = await supabase
       .from("projects")
       .select("*")
+      .order("featured", { ascending: false })
+      .order("display_order", { ascending: true })
       .order("created_at", { ascending: false });
     
     if (error) {
@@ -238,6 +257,70 @@ export default function AdminPage() {
     } else {
         notify("Project successfully expunged from database.", "success");
         fetchProjects();
+    }
+  }
+
+  // DND Handlers
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    
+    if (active.id !== over?.id) {
+      const oldIndex = projects.findIndex(p => p.id === active.id);
+      const newIndex = projects.findIndex(p => p.id === over?.id);
+      
+      const newProjects = arrayMove(projects, oldIndex, newIndex) as Project[];
+      setProjects(newProjects);
+      
+      // Persist the new order in background
+      await updateProjectOrder(newProjects);
+    }
+  }
+
+  async function updateProjectOrder(projectList: Project[]) {
+    try {
+      // Update each project's display_order
+      const updates = projectList.map((p, index) => ({
+        id: p.id,
+        display_order: index
+      }));
+      
+      // Next.js Supabase client doesn't support bulk updates very gracefully for multiple filters,
+      // so we do them sequentially or in small batches. 
+      // For a small list of projects, individual updates are fine.
+      for (const update of updates) {
+        await supabase
+          .from("projects")
+          .update({ display_order: update.display_order })
+          .eq("id", update.id!);
+      }
+      
+      notify("Project sequence synchronized.", "success");
+    } catch (error) {
+      notify("Failed to synchronize sequence.", "error");
+    }
+  }
+
+  async function handleTogglePin(project: Project) {
+    if (!project.id) return;
+    const newStatus = !project.featured;
+    
+    const { error } = await supabase
+      .from("projects")
+      .update({ featured: newStatus })
+      .eq("id", project.id);
+      
+    if (error) {
+      notify("Pin status update failed.", "error");
+    } else {
+      notify(newStatus ? "Project pinned to top." : "Project unpinned.", "success");
+      fetchProjects();
     }
   }
 
@@ -451,7 +534,7 @@ export default function AdminPage() {
                             onChange={(e) => setFormData({...formData, featured: e.target.checked})}
                             className="w-5 h-5 bg-black/40 border-white/10 rounded text-primary focus:ring-0 accent-primary"
                         />
-                        <label htmlFor="featured" className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/40 cursor-pointer">Prioritize in Showcase</label>
+                        <label htmlFor="featured" className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/40 cursor-pointer">Pin to Showcase Layout</label>
                     </div>
 
                     <div className="flex gap-4 w-full md:w-auto">
@@ -484,69 +567,33 @@ export default function AdminPage() {
                <div className="flex-1 h-[1px] bg-white/5"></div>
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 group/list">
+            <div className="grid grid-cols-1 group/list">
               {isLoading && projects.length === 0 ? (
                 <div className="col-span-full p-20 text-center">
                    <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
                    <span className="text-xs text-white/20 uppercase tracking-widest">Accessing Secure Logs...</span>
                 </div>
               ) : (
-                projects.map((project) => (
-                  <div key={project.id} className="group p-8 border-b border-white/5 hover:bg-white/[0.02] transition-all flex items-start gap-8 relative overflow-hidden">
-                    {/* Hover Glow */}
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                    
-                    <div className="w-32 h-32 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-white/10 flex-shrink-0 relative z-10">
-                      {project.thumbnail ? (
-                        <img src={project.thumbnail} alt={project.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/10">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex-1 relative z-10">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="flex items-center gap-3 mb-2">
-                             <h3 className="font-headline font-bold text-2xl text-white group-hover:text-primary transition-colors tracking-tight italic">{project.name}</h3>
-                             {project.featured && (
-                               <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[0.5rem] font-bold uppercase tracking-widest border border-primary/20">Elite</span>
-                             )}
-                          </div>
-                          <span className="text-[0.6rem] text-slate-500 font-mono tracking-widest">{project.link}</span>
-                        </div>
-                        <div className="flex gap-3">
-                          <button 
-                            onClick={() => handleEdit(project)}
-                            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-primary/50 transition-all flex items-center justify-center"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                          </button>
-                          <button 
-                            onClick={() => project.id && handleDeleteClick(project.id)}
-                            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-red-400 hover:border-red-400/50 transition-all flex items-center justify-center"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                          </button>
-                        </div>
-                      </div>
-                      <p className="mt-4 text-slate-400 font-medium text-xs leading-relaxed line-clamp-3 max-w-lg">
-                        {project.description}
-                      </p>
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        {(() => {
-                            try {
-                                return (JSON.parse(project.technologies) as string[]).map(t => (
-                                    <span key={t} className="text-[0.55rem] font-bold uppercase tracking-[0.2em] text-white/30">{t}</span>
-                                ))
-                            } catch(e) { return null }
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                ))
+                <DndContext 
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext 
+                    items={projects.map(p => p.id!)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {projects.map((project) => (
+                      <SortableProjectCard 
+                        key={project.id}
+                        project={project}
+                        onEdit={handleEdit}
+                        onDelete={handleDeleteClick}
+                        onTogglePin={handleTogglePin}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               )}
             </div>
           </div>

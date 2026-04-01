@@ -81,6 +81,7 @@ export default function ProjectsPage() {
         .from("projects")
         .select("*")
         .order("featured", { ascending: false })
+        .order("display_order", { ascending: true })
         .order("created_at", { ascending: false });
 
       if (error) {
