@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
     const isSubdomain = reqUrl.hostname.startsWith("admin.");
 
     if (!email || !password) {
-      return NextResponse.redirect(new URL(isSubdomain ? "/login?error=MissingCredentials" : "/admin/login?error=MissingCredentials", origin));
+      return NextResponse.redirect(
+        new URL(isSubdomain ? "/login?error=MissingCredentials" : "/admin/login?error=MissingCredentials", origin),
+        { status: 302 }
+      );
     }
 
     // Authenticate with Supabase Natively
@@ -30,7 +33,10 @@ export async function POST(req: NextRequest) {
 
     if (error || !data.session) {
       console.error("Login failed:", error?.message);
-      return NextResponse.redirect(new URL(isSubdomain ? "/login?error=InvalidCredentials" : "/admin/login?error=InvalidCredentials", origin));
+      return NextResponse.redirect(
+        new URL(isSubdomain ? "/login?error=InvalidCredentials" : "/admin/login?error=InvalidCredentials", origin),
+        { status: 302 }
+      );
     }
 
     // Create a response redirecting to the main admin entry (correct path based on domain)
@@ -48,6 +54,6 @@ export async function POST(req: NextRequest) {
 
   } catch (err) {
     console.error("Callback route error:", err);
-    return NextResponse.redirect(new URL("/admin/login?error=InternalServerError", req.url));
+    return NextResponse.redirect(new URL("/admin/login?error=InternalServerError", req.url), { status: 302 });
   }
 }

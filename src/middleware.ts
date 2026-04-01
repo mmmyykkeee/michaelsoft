@@ -20,10 +20,11 @@ export default async function middleware(req: NextRequest) {
   const hostname = req.headers.get("host") || "";
   const path = url.pathname;
 
-  // 1. Safety check for the Root Domain (localhost or co.ke)
-  // If we're JUST at localhost:3002 or michaelsoft.co.ke, go to the landing page.
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "michaelsoft.co.ke";
-  if (hostname === "localhost:3002" || hostname === "127.0.0.1:3002" || hostname === rootDomain) {
+  const isLocalhost = hostname.includes("localhost") || hostname.includes("127.0.0.1");
+  const isRootDomain = hostname === rootDomain || hostname === "localhost:3002" || hostname === "127.0.0.1:3002";
+  
+  if (isRootDomain) {
     return NextResponse.next();
   }
 
@@ -50,7 +51,7 @@ export default async function middleware(req: NextRequest) {
           // Redirect unauthenticated users to the login page, passing the callback url
           const loginUrl = new URL("/login", req.url);
           loginUrl.searchParams.set("callbackURL", req.url);
-          return NextResponse.redirect(loginUrl);
+          return NextResponse.redirect(loginUrl, { status: 302 });
         }
       }
     }

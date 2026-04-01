@@ -30,26 +30,22 @@ export default function LoginForm({ error: initialError }: { error?: string }) {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         body: formData,
-        redirect: "manual" // We handle redirect ourselves
+        redirect: "follow"
       });
-
-      if (res.type === "opaqueredirect" || res.status === 302 || res.redirected) {
-        // If it was successful, it will redirect to /admin or wherever the callback url was.
-        // Since we chose redirect: 'manual', we might need to check if it's working.
-        // Actually, the easiest way to show loading for a standard form is to just set it to true on submit.
-        // The browser will then move away when the response comes.
-        window.location.href = res.url || "/admin";
-        return;
-      }
-
+      
+      // If the fetch followed a redirect, check if it ended up on an error page or a success page.
       const url = new URL(res.url);
       const errorParam = url.searchParams.get("error");
+      
       if (errorParam) {
         setError(errorParam);
         setLoading(false);
-      } else {
-        // Fallback to manual redirect if fetch followed it
+      } else if (res.ok) {
+        // Redirection was successful (usually it ends at /admin or /)
         window.location.href = res.url;
+      } else {
+        setError("InternalServerError");
+        setLoading(false);
       }
     } catch (err) {
       console.error(err);
