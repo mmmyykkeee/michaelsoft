@@ -1,3 +1,5 @@
+import { betterFetch } from "@better-fetch/fetch";
+import type { Session } from "better-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
@@ -37,7 +39,23 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.rewrite(new URL(`${extUrl}${path}`, req.url));
     }
 
-    // 4. Internal Rewrite to Pages
+    // 4. Admin Subdomain Protection with Better Auth
+    if (subdomain === "admin") {
+      // Exclude auth-related routes to prevent redirect loops
+      if (!path.startsWith("/login") && !path.startsWith("/api/auth")) {
+        // Native check using the session cookie created by our callback route
+        const sessionCookie = req.cookies.get("sb-admin-session");
+
+        if (!sessionCookie?.value) {
+          // Redirect unauthenticated users to the login page, passing the callback url
+          const loginUrl = new URL("/login", req.url);
+          loginUrl.searchParams.set("callbackURL", req.url);
+          return NextResponse.redirect(loginUrl);
+        }
+      }
+    }
+
+    // 5. Internal Rewrite to Pages
     // For admin.localhost:3002, rewrite to /admin/...
     return NextResponse.rewrite(
       new URL(`/${subdomain}${path === "/" ? "" : path}`, req.url)

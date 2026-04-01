@@ -100,9 +100,9 @@ export default function ProjectsPage() {
       <div className="nebula-bg" />
       
       {/* Animated orbs */}
-      <div className="orb-projects orb-1 absolute pointer-events-none" />
-      <div className="orb-projects orb-2 absolute pointer-events-none" />
-      <div className="orb-projects orb-3 absolute pointer-events-none" />
+      <div className="orb orb-projects orb-1 absolute pointer-events-none" />
+      <div className="orb orb-projects orb-2 absolute pointer-events-none" />
+      <div className="orb orb-projects orb-3 absolute pointer-events-none" />
       <MouseEffect />
 
       {/* Main content */}

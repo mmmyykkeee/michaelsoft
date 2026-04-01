@@ -22,7 +22,7 @@ export default function ProjectCard({
   return (
     <Link href={link} target="_blank" rel="noopener noreferrer">
       <div
-        className={`group relative overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl transition-all duration-500 hover:border-primary/50 cursor-pointer h-full ${
+        className={`group relative ${image ? "grid grid-rows-2" : "flex flex-col"} overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl transition-all duration-500 hover:border-primary/50 cursor-pointer h-full ${
           featured
             ? "col-span-1 md:col-span-2 bg-gradient-to-br from-surface-container to-surface hover:shadow-[0_0_40px_rgba(0,242,255,0.15)]"
             : "bg-surface-container/40 hover:shadow-[0_0_30px_rgba(0,242,255,0.1)]"
@@ -33,7 +33,7 @@ export default function ProjectCard({
 
         {/* Image section if provided */}
         {image && (
-          <div className="relative h-56 md:h-60 overflow-hidden bg-surface-container-high border-b border-white/5">
+          <div className="relative w-full h-full overflow-hidden bg-surface-container-high border-b border-white/5">
             <img
               src={image}
               alt={title}
@@ -44,11 +44,11 @@ export default function ProjectCard({
         )}
 
         {/* Content */}
-        <div className="relative p-5 md:p-6 flex flex-col h-full bg-[#0a0f13]/40">
+        <div className="relative p-4 md:p-5 flex flex-col h-full bg-[#0a0f13]/40">
           {/* Header & Description */}
           <div className="mb-4">
             <div className="flex items-start justify-between mb-2">
-              <h3 className="text-lg font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide uppercase italic">
+              <h3 className="text-sm font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide uppercase italic">
                 {title}
               </h3>
               <svg
@@ -84,7 +84,7 @@ export default function ProjectCard({
 
           {/* Footer - Pushed to bottom of content area */}
           <div className="mt-auto flex items-center text-primary text-[0.6rem] font-bold font-headline tracking-[0.2em] opacity-40 group-hover:opacity-100 transition-opacity duration-300 uppercase italic">
-            Visit Archive
+            Visit Project
             <svg
               className="w-3 h-3 ml-2 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"
