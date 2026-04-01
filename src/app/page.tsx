@@ -3,6 +3,32 @@
 import { useEffect, useRef, useState } from "react";
 import ProgressIndicator from "@/components/ProgressIndicator";
 
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3002";
+
+const getSubdomainUrl = (subdomain: string) => {
+  const isDev = process.env.NODE_ENV === "development";
+  const protocol = isDev ? "http" : "https";
+  
+  if (typeof window !== "undefined") {
+    const { hostname, port } = window.location;
+    const isIP = /^[0-9.]+$/.test(hostname);
+    const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1" || hostname.endsWith(".local");
+    
+    if (isLocalhost || isIP) {
+      if (isIP) {
+        return `http://${hostname}${port ? `:${port}` : ""}/${subdomain}`;
+      }
+      return `${protocol}://${subdomain}.${hostname}${port ? `:${port}` : ""}`;
+    }
+  }
+  
+  // SSR or Production fallback
+  if (isDev) {
+    return `${protocol}://${subdomain}.localhost:3002`;
+  }
+  return `https://${subdomain}.${ROOT_DOMAIN}`;
+};
+
 function MouseEffect() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -151,7 +177,7 @@ export default function Home() {
           </a>
           <a href="/projects" className="flex flex-col items-center gap-2 text-white/40 text-[0.6rem] uppercase tracking-widest_extra font-headline font-semibold hover:text-on-surface transition-colors group">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:stroke-primary transition-colors"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            <span>Projects Archive</span>
+            <span>Projects</span>
           </a>
           
           <div className="relative flex flex-col items-center" ref={mobileContactRef}>

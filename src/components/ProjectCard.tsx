@@ -33,22 +33,22 @@ export default function ProjectCard({
 
         {/* Image section if provided */}
         {image && (
-          <div className="relative h-40 md:h-48 overflow-hidden bg-surface-container-high">
+          <div className="relative h-56 md:h-60 overflow-hidden bg-surface-container-high border-b border-white/5">
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface-container/60 via-transparent to-transparent" />
           </div>
         )}
 
         {/* Content */}
-        <div className="relative p-6 md:p-8 flex flex-col justify-between h-full">
-          {/* Header */}
-          <div>
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="text-lg md:text-xl font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide">
+        <div className="relative p-5 md:p-6 flex flex-col h-full bg-[#0a0f13]/40">
+          {/* Header & Description */}
+          <div className="mb-4">
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="text-lg font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide uppercase italic">
                 {title}
               </h3>
               <svg
@@ -65,26 +65,26 @@ export default function ProjectCard({
               </svg>
             </div>
 
-            <p className="text-sm text-on-surface-variant group-hover:text-on-surface/80 transition-colors duration-300 leading-relaxed mb-4">
+            <p className="text-xs text-on-surface-variant group-hover:text-on-surface/80 transition-colors duration-300 leading-relaxed line-clamp-3 font-medium">
               {description}
             </p>
           </div>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          {/* Tags - Moved closer to content */}
+          <div className="flex flex-wrap gap-1.5 mb-6">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/40 transition-all duration-300 font-headline tracking-wider"
+                className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/5 text-white/40 border border-white/5 group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/20 transition-all duration-300 font-headline font-bold uppercase tracking-widest"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          {/* Footer with subtle indicator */}
-          <div className="flex items-center text-primary text-xs font-headline tracking-widest opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-            VIEW PROJECT
+          {/* Footer - Pushed to bottom of content area */}
+          <div className="mt-auto flex items-center text-primary text-[0.6rem] font-bold font-headline tracking-[0.2em] opacity-40 group-hover:opacity-100 transition-opacity duration-300 uppercase italic">
+            Visit Archive
             <svg
               className="w-3 h-3 ml-2 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"

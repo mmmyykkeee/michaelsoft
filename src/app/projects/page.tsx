@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
+import { supabase } from "@/lib/supabase";
 
 const ContactLinks = () => (
   <>
@@ -70,7 +71,28 @@ export default function ProjectsPage() {
   }, [contactOpen]);
 
   // Projects will be fetched from Supabase
-  const projects: any[] = [];
+  const [projects, setProjects] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("featured", { ascending: false })
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching projects:", error);
+      } else {
+        setProjects(data || []);
+      }
+      setIsLoading(false);
+    }
+
+    fetchProjects();
+  }, []);
 
   return (
     <>
@@ -139,11 +161,38 @@ export default function ProjectsPage() {
             contentReady ? "[animation-delay:0.4s]" : ""
           }`}
         >
-          {projects.map((project, index) => (
-            <div key={index} className="animate-fadeIn" style={{animationDelay: `${0.4 + index * 0.05}s`}}>
-              <ProjectCard {...project} />
-            </div>
-          ))}
+          {isLoading ? (
+             <div className="col-span-full py-20 text-center">
+                <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                <span className="text-xs text-white/20 uppercase tracking-widest">Scanning Archive...</span>
+             </div>
+          ) : projects.length === 0 ? (
+             <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-2xl">
+                <p className="text-white/20 uppercase tracking-widest text-xs">No projects found in the archive.</p>
+             </div>
+          ) : (
+            projects.map((project, index) => {
+              let tags = [];
+              try {
+                tags = typeof project.technologies === "string" ? JSON.parse(project.technologies) : (project.technologies || []);
+              } catch (e) {
+                console.error("Error parsing technologies:", e);
+              }
+              
+              return (
+                <div key={project.id || index} className="animate-fadeIn" style={{animationDelay: `${0.4 + index * 0.05}s`}}>
+                  <ProjectCard 
+                    title={project.name}
+                    description={project.description}
+                    link={project.link}
+                    tags={tags}
+                    image={project.thumbnail}
+                    featured={project.featured}
+                  />
+                </div>
+              );
+            })
+          )}
         </div>
 
         {/* Call to action */}
