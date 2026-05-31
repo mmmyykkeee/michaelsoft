@@ -3,8 +3,6 @@
 import React, { useRef, useEffect } from 'react';
 
 interface Dot {
-  x: number;
-  y: number;
   baseX: number;
   baseY: number;
   size: number;
@@ -16,7 +14,7 @@ interface Dot {
 
 export default function InteractiveDots() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -9999, y: -9999, radius: 200 });
+  const mouseRef = useRef({ x: -9999, y: -9999, radius: 120 });
   const dotsRef = useRef<Dot[]>([]);
   const animIdRef = useRef<number>(0);
 
@@ -26,25 +24,20 @@ export default function InteractiveDots() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const spacing = 24;
-    // Darker, more visible gray that shows up well on #fafafa bg
-    const dotColor = '#8b8fa3';
-    const dotAlpha = 0.7;
+    const spacing = 18;
+    const dotColor = '#374151';
+    const dotAlpha = 0.9;
 
     function initDots(w: number, h: number) {
       const dots: Dot[] = [];
-
-      // Fill entire viewport with dots — no elliptical mask
-      for (let x = spacing; x < w; x += spacing) {
-        for (let y = spacing; y < h; y += spacing) {
+      for (let x = spacing / 2; x < w; x += spacing) {
+        for (let y = spacing / 2; y < h; y += spacing) {
           dots.push({
-            x, y,
             baseX: x,
             baseY: y,
             currentX: x,
             currentY: y,
-            // Larger size range for more visibility
-            size: 2.0 + Math.random() * 1.8,
+            size: 0.8 + Math.random() * 0.7, // 0.8-1.5px — tiny dots
             velocityX: 0,
             velocityY: 0,
           });
@@ -54,9 +47,11 @@ export default function InteractiveDots() {
     }
 
     function handleResize() {
-      canvas!.width = window.innerWidth;
-      canvas!.height = window.innerHeight;
-      initDots(canvas!.width, canvas!.height);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas!.width = w;
+      canvas!.height = h;
+      initDots(w, h);
     }
 
     function handleMouse(e: MouseEvent) {
@@ -89,21 +84,20 @@ export default function InteractiveDots() {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < radius && dist > 0) {
-          // Push away from cursor — stronger scatter with wider radius
+          // Gentle push away from cursor — subtle scatter, short travel
           const force = Math.pow((radius - dist) / radius, 1.4);
           const angle = Math.atan2(dy, dx);
-          const pushX = Math.cos(angle) * force * 28;
-          const pushY = Math.sin(angle) * force * 28;
+          const pushX = Math.cos(angle) * force * 12;
+          const pushY = Math.sin(angle) * force * 12;
 
-          dot.velocityX += (pushX - dot.velocityX) * 0.15;
-          dot.velocityY += (pushY - dot.velocityY) * 0.15;
+          dot.velocityX += (pushX - dot.velocityX) * 0.1;
+          dot.velocityY += (pushY - dot.velocityY) * 0.1;
         } else {
-          // Return to base with ~3-4 second smooth glide
-          // Critically damped so dots glide back without oscillation
-          dot.velocityX += (dot.baseX - dot.currentX) * 0.005;
-          dot.velocityY += (dot.baseY - dot.currentY) * 0.005;
-          dot.velocityX *= 0.94;
-          dot.velocityY *= 0.94;
+          // Slow drift back to base — takes ~10 seconds to fully settle
+          dot.velocityX += (dot.baseX - dot.currentX) * 0.0003;
+          dot.velocityY += (dot.baseY - dot.currentY) * 0.0003;
+          dot.velocityX *= 0.99;
+          dot.velocityY *= 0.99;
         }
 
         dot.currentX += dot.velocityX;
@@ -115,7 +109,6 @@ export default function InteractiveDots() {
       }
 
       ctx.globalAlpha = 1;
-
       animIdRef.current = requestAnimationFrame(animate);
     }
 
@@ -132,8 +125,8 @@ export default function InteractiveDots() {
   return (
     <canvas
       ref={canvasRef}
-      // No mask — dots cover the entire background
-      className="absolute inset-0 z-0 pointer-events-none"
+      className="fixed inset-0 top-0 left-0 w-screen h-screen z-0 pointer-events-none"
+      style={{ display: 'block' }}
     />
   );
 }
