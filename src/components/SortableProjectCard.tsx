@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Pencil, Trash2, Pin, PinOff } from "lucide-react";
@@ -29,6 +29,9 @@ export function SortableProjectCard({
   onDelete, 
   onTogglePin 
 }: SortableProjectCardProps) {
+  // Stable cache buster — set once on mount to avoid re-fetching on every render
+  const cacheBuster = useRef(Date.now());
+
   const {
     attributes,
     listeners,
@@ -73,7 +76,7 @@ export function SortableProjectCard({
       
       <div className="w-32 h-32 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-white/10 flex-shrink-0 relative z-10 bg-black/40">
         {project.thumbnail ? (
-          <img src={project.thumbnail} alt={project.name} className="w-full h-full object-cover" />
+          <img src={`${project.thumbnail}?cb=${cacheBuster.current}`} alt={project.name} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/10">
              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
@@ -87,7 +90,7 @@ export function SortableProjectCard({
             <div className="flex items-center gap-3 mb-2">
                <h3 className="font-headline font-bold text-2xl text-white group-hover:text-primary transition-colors tracking-tight italic">{project.name}</h3>
                {project.featured && (
-                 <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[0.5rem] font-bold uppercase tracking-widest border border-primary/20 flex items-center gap-1">
+                 <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[0.5rem] font-bold tracking-widest border border-primary/20 flex items-center gap-1">
                    <Pin size={8} className="fill-current" />
                    Pinned
                  </span>
@@ -124,7 +127,7 @@ export function SortableProjectCard({
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           {technologies.map(t => (
-            <span key={t} className="text-[0.55rem] font-bold uppercase tracking-[0.2em] text-white/30">{t}</span>
+            <span key={t} className="text-[0.55rem] font-bold tracking-[0.2em] text-white/30">{t}</span>
           ))}
         </div>
       </div>

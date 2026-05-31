@@ -73,6 +73,7 @@ export default function ProjectsPage() {
   // Projects will be fetched from Supabase
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchVersion, setFetchVersion] = useState(0);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -88,6 +89,7 @@ export default function ProjectsPage() {
         console.error("Error fetching projects:", error);
       } else {
         setProjects(data || []);
+        setFetchVersion(v => v + 1);
       }
       setIsLoading(false);
     }
@@ -165,11 +167,11 @@ export default function ProjectsPage() {
           {isLoading ? (
              <div className="col-span-full py-20 text-center">
                 <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                <span className="text-xs text-white/20 uppercase tracking-widest">Scanning Archive...</span>
+                <span className="text-xs text-white/20 tracking-widest">Scanning Archive...</span>
              </div>
           ) : projects.length === 0 ? (
              <div className="col-span-full py-20 text-center border border-dashed border-white/5 rounded-2xl">
-                <p className="text-white/20 uppercase tracking-widest text-xs">No projects found in the archive.</p>
+                <p className="text-white/20 tracking-widest text-xs">No projects found in the archive.</p>
              </div>
           ) : (
             projects.map((project, index) => {
@@ -189,6 +191,7 @@ export default function ProjectsPage() {
                     tags={tags}
                     image={project.thumbnail}
                     featured={project.featured}
+                    cacheKey={fetchVersion}
                   />
                 </div>
               );

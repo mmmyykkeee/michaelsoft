@@ -1,0 +1,85 @@
+# Keep Supabase Alive — MichaelSoft
+#
+# Supabase free tier projects are automatically paused after 7 days of inactivity.
+# This workflow pings the MichaelSoft Supabase project every 4 days to simulate
+# activity and prevent the project from being paused.
+#
+# Setup Instructions:
+#  1. Push this file to your GitHub repo (mmmyykkeee/michaelsoft)
+#  2. Go to repo Settings -> Secrets and variables -> Actions
+#  3. Add these two repository secrets:
+#
+#     SUPABASE_PROJECT_REF
+#       Your Supabase project reference ID (the subdomain in your supabase.co URL).
+#       Example: if your URL is "https://abcdefghijkl.supabase.co", the ref is "abcdefghijkl"
+#       You can find this in your Supabase Dashboard -> Project Settings -> General -> Reference ID
+#
+#     SUPABASE_ANON_KEY
+#       Your Supabase anon/public key.
+#       Found in Supabase Dashboard -> Project Settings -> API -> Project API keys -> anon public
+#
+#  4. The workflow will start automatically on the next scheduled run.
+#     You can also trigger it manually from the Actions tab.
+
+name: Keep Supabase Alive — MichaelSoft
+
+on:
+  schedule:
+    # Runs at midnight every 4th day of the month (1st, 5th, 9th, etc.)
+    # This pings ~7-8 times per month, well within the 7-day inactivity window.
+    - cron: '0 0 */4 * *'
+  workflow_dispatch:
+    # Allows you to manually trigger the workflow from the Actions tab
+
+jobs:
+  ping:
+    name: Ping Supabase Project
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Supabase REST API
+        id: ping_api
+        env:
+          SUPABASE_URL: https://${{ secrets.SUPABASE_PROJECT_REF }}.supabase.co
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase REST API..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/rest/v1/" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            --connect-timeout 10 \
+            --max-time 15)
+          echo "HTTP Status: $HTTP_CODE"
+
+          # 200, 401, and 404 are all expected responses that prove the API is live
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "404" ]; then
+            echo "✅ Supabase API is responding (status: $HTTP_CODE)"
+          else
+            echo "⚠️ Unexpected status code: $HTTP_CODE — project may be paused!"
+          fi
+
+      - name: Ping Supabase Auth Endpoint
+        if: always()
+        env:
+          SUPABASE_URL: https://${{ secrets.SUPABASE_PROJECT_REF }}.supabase.co
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase Auth endpoint..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/auth/v1/settings" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            --connect-timeout 10 \
+            --max-time 15)
+          echo "Auth endpoint status: $HTTP_CODE"
+          echo "✅ Ping complete"
+
+      - name: Log Success
+        if: always()
+        run: |
+          echo "=========================================="
+          echo "  MichaelSoft Supabase Keepalive"
+          echo "  Completed at: $(date -u)"
+          echo "  Next run: in ~4 days"
+          echo "=========================================="

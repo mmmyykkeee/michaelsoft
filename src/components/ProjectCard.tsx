@@ -9,6 +9,7 @@ interface ProjectCardProps {
   link: string;
   image?: string;
   featured?: boolean;
+  cacheKey?: number;
 }
 
 export default function ProjectCard({
@@ -18,6 +19,7 @@ export default function ProjectCard({
   link,
   image,
   featured = false,
+  cacheKey,
 }: ProjectCardProps) {
   return (
     <Link href={link} target="_blank" rel="noopener noreferrer">
@@ -35,7 +37,7 @@ export default function ProjectCard({
         {image && (
           <div className="relative w-full h-full overflow-hidden bg-surface-container-high border-b border-white/5">
             <img
-              src={image}
+              src={cacheKey ? `${image}?cb=${cacheKey}` : image}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
@@ -48,7 +50,7 @@ export default function ProjectCard({
           {/* Header & Description */}
           <div className="mb-4">
             <div className="flex items-start justify-between mb-2">
-              <h3 className="text-sm font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide uppercase italic">
+              <h3 className="text-sm font-headline font-bold text-on-surface group-hover:text-primary transition-colors duration-300 tracking-wide italic">
                 {title}
               </h3>
               <svg
@@ -75,7 +77,7 @@ export default function ProjectCard({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/5 text-white/40 border border-white/5 group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/20 transition-all duration-300 font-headline font-bold uppercase tracking-widest"
+                className="text-[0.6rem] px-2 py-0.5 rounded-md bg-white/5 text-white/40 border border-white/5 group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/20 transition-all duration-300 font-headline font-bold tracking-widest"
               >
                 {tag}
               </span>
@@ -83,7 +85,7 @@ export default function ProjectCard({
           </div>
 
           {/* Footer - Pushed to bottom of content area */}
-          <div className="mt-auto flex items-center text-primary text-[0.6rem] font-bold font-headline tracking-[0.2em] opacity-40 group-hover:opacity-100 transition-opacity duration-300 uppercase italic">
+          <div className="mt-auto flex items-center text-primary text-[0.6rem] font-bold font-headline tracking-[0.2em] opacity-40 group-hover:opacity-100 transition-opacity duration-300 italic">
             Visit Project
             <svg
               className="w-3 h-3 ml-2 transition-transform duration-300 group-hover:translate-x-1"

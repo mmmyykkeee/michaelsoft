@@ -15,21 +15,21 @@ export default function DocsPage() {
     <div className="min-h-screen bg-[#020617] text-slate-200 font-body relative overflow-hidden flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/5 p-8 bg-black/20 backdrop-blur-xl z-20">
-         <div className="mb-10 font-headline font-bold text-xs tracking-widest uppercase flex items-center gap-2">
+         <div className="mb-10 font-headline font-bold text-xs tracking-widest flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-primary/20 flex items-center justify-center border border-primary/40 text-[0.6rem] text-primary">D</div>
             Docs 1.0
          </div>
 
          <nav className="space-y-6">
             <div>
-               <h4 className="text-[0.65rem] font-bold text-white/40 uppercase tracking-widest mb-3">Getting Started</h4>
+               <h4 className="text-[0.65rem] font-bold text-white/40 tracking-widest mb-3">Getting Started</h4>
                <ul className="space-y-2">
                   <li className="text-sm text-primary font-medium cursor-pointer">Quickstart</li>
                   <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Architecture</li>
                </ul>
             </div>
             <div>
-               <h4 className="text-[0.65rem] font-bold text-white/40 uppercase tracking-widest mb-3">Core Modules</h4>
+               <h4 className="text-[0.65rem] font-bold text-white/40 tracking-widest mb-3">Core Modules</h4>
                <ul className="space-y-2">
                   <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Nebula OS</li>
                   <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Data Sync</li>
@@ -40,7 +40,7 @@ export default function DocsPage() {
 
       <main className="flex-1 p-8 md:p-16 relative z-10 max-w-4xl mx-auto overflow-y-auto">
         <header className="mb-16">
-          <h1 className="font-headline text-5xl font-extrabold tracking-tight mb-4 text-white uppercase italic">
+          <h1 className="font-headline text-5xl font-extrabold tracking-tight mb-4 text-white italic">
             Documentation
           </h1>
           <p className="text-slate-400 text-lg">

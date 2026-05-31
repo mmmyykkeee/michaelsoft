@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const START_PROGRESS = 63.4;
 const TARGET_PROGRESS = 100.0;
 const START_DATE = new Date("2026-03-27T01:00:00").getTime();
-const END_DATE = new Date("2026-06-27T01:00:00").getTime();
+const END_DATE = new Date("2026-08-27T01:00:00").getTime();
 
 export default function ProgressIndicator() {
   const [progress, setProgress] = useState(START_PROGRESS);

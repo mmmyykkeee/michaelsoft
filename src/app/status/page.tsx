@@ -19,10 +19,10 @@ export default function StatusPage() {
       <div className="max-w-xl w-full text-center relative z-10">
         <div className="mb-12 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00ff88]/10 border border-[#00ff88]/30">
           <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse"></span>
-          <span className="text-[0.65rem] font-headline font-bold uppercase tracking-widest text-[#00ff88]">All Systems Operational</span>
+          <span className="text-[0.65rem] font-headline font-bold tracking-widest text-[#00ff88]">All Systems Operational</span>
         </div>
 
-        <h1 className="font-headline text-5xl font-extrabold tracking-tight mb-4 text-white uppercase italic">
+        <h1 className="font-headline text-5xl font-extrabold tracking-tight mb-4 text-white italic">
           Infrastructure Status
         </h1>
         <p className="text-slate-400 text-sm mb-12">
@@ -43,14 +43,14 @@ export default function StatusPage() {
                    <span className="text-sm font-medium">{sys.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <span className="text-[0.65rem] font-bold text-white/40 uppercase tracking-widest">{sys.uptime}</span>
-                    <span className="text-[0.65rem] font-bold text-[#00ff88] uppercase tracking-widest">{sys.status}</span>
+                    <span className="text-[0.65rem] font-bold text-white/40 tracking-widest">{sys.uptime}</span>
+                    <span className="text-[0.65rem] font-bold text-[#00ff88] tracking-widest">{sys.status}</span>
                 </div>
              </div>
            ))}
         </div>
 
-        <div className="mt-12 text-[0.6rem] text-slate-500 uppercase tracking-widest_extra font-bold">
+        <div className="mt-12 text-[0.6rem] text-slate-500 tracking-widest_extra font-bold">
           Last updated: {new Date().toLocaleTimeString()} (UTC)
         </div>
       </div>

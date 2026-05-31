@@ -392,7 +392,7 @@ export default function AdminPage() {
           </div>
           <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-2">
              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-             <span className="text-[0.6rem] font-bold tracking-widest uppercase">Kernel Active</span>
+             <span className="text-[0.6rem] font-bold tracking-widest">Kernel Active</span>
           </div>
         </header>
 
@@ -408,7 +408,7 @@ export default function AdminPage() {
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                 <div className="space-y-6">
                     <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-white/40 mb-2">Project Identity</label>
+                    <label className="block text-[0.65rem] font-bold tracking-widest text-white/40 mb-2">Project Identity</label>
                     <input 
                         type="text" 
                         value={formData.name}
@@ -420,7 +420,7 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-white/40 mb-2">Access URL</label>
+                    <label className="block text-[0.65rem] font-bold tracking-widest text-white/40 mb-2">Access URL</label>
                     <input 
                         type="url" 
                         value={formData.link}
@@ -432,11 +432,11 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-white/40 mb-2">Technological Stack</label>
+                    <label className="block text-[0.65rem] font-bold tracking-widest text-white/40 mb-2">Technological Stack</label>
                     <div className="relative">
                         <div className="flex flex-wrap gap-2 min-h-[52px] w-full bg-black/40 border border-white/10 rounded-xl p-2 mb-2">
                             {selectedTechs.map(t => (
-                                <span key={t} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[0.65rem] font-bold uppercase tracking-wider">
+                                <span key={t} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[0.65rem] font-bold tracking-wider">
                                     {t}
                                     <button type="button" onClick={() => removeTech(t)} className="hover:text-white transition-colors">&times;</button>
                                 </span>
@@ -462,7 +462,7 @@ export default function AdminPage() {
                                         key={s}
                                         type="button"
                                         onClick={() => addTech(s)}
-                                        className="w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-primary/10 hover:text-primary transition-all decoration-none"
+                                        className="w-full text-left px-4 py-2 text-xs font-bold tracking-widest hover:bg-primary/10 hover:text-primary transition-all decoration-none"
                                     >
                                         {s}
                                     </button>
@@ -475,7 +475,7 @@ export default function AdminPage() {
 
                 <div className="space-y-6">
                     <div>
-                        <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-white/40 mb-2">Visual Manifestation (Screenshot)</label>
+                        <label className="block text-[0.65rem] font-bold tracking-widest text-white/40 mb-2">Visual Manifestation (Screenshot)</label>
                         <div className="flex gap-4 items-start">
                             <div 
                                 className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden group cursor-pointer hover:border-primary/50 transition-all relative"
@@ -513,7 +513,7 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-white/40 mb-2">Abstract / Summary</label>
+                    <label className="block text-[0.65rem] font-bold tracking-widest text-white/40 mb-2">Abstract / Summary</label>
                     <textarea 
                         value={formData.description}
                         onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -534,7 +534,7 @@ export default function AdminPage() {
                             onChange={(e) => setFormData({...formData, featured: e.target.checked})}
                             className="w-5 h-5 bg-black/40 border-white/10 rounded text-primary focus:ring-0 accent-primary"
                         />
-                        <label htmlFor="featured" className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/40 cursor-pointer">Pin to Showcase Layout</label>
+                        <label htmlFor="featured" className="text-[0.65rem] font-bold tracking-[0.2em] text-white/40 cursor-pointer">Pin to Showcase Layout</label>
                     </div>
 
                     <div className="flex gap-4 w-full md:w-auto">
@@ -542,7 +542,7 @@ export default function AdminPage() {
                             <button 
                             type="button" 
                             onClick={resetForm}
-                            className="px-8 py-4 bg-white/5 border border-white/10 text-white/60 font-headline font-bold rounded-xl text-[0.65rem] uppercase tracking-widest hover:bg-white/10 transition-all flex-1 md:flex-none"
+                            className="px-8 py-4 bg-white/5 border border-white/10 text-white/60 font-headline font-bold rounded-xl text-[0.65rem] tracking-widest hover:bg-white/10 transition-all flex-1 md:flex-none"
                             >
                             Abort
                             </button>
@@ -550,7 +550,7 @@ export default function AdminPage() {
                         <button 
                             type="submit" 
                             disabled={isLoading || uploading}
-                            className="px-12 py-4 bg-primary text-black font-headline font-bold rounded-xl text-[0.65rem] uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50 shadow-[0_0_30px_rgba(0,242,255,0.2)] hover:shadow-[0_0_40px_rgba(0,242,255,0.4)] flex-1 md:flex-none"
+                            className="px-12 py-4 bg-primary text-black font-headline font-bold rounded-xl text-[0.65rem] tracking-widest hover:bg-white transition-all disabled:opacity-50 shadow-[0_0_30px_rgba(0,242,255,0.2)] hover:shadow-[0_0_40px_rgba(0,242,255,0.4)] flex-1 md:flex-none"
                         >
                             {isEditing ? "Synchronize Changes" : "Deploy Schematic"}
                         </button>
@@ -562,7 +562,7 @@ export default function AdminPage() {
 
           {/* List Section */}
           <div className="lg:col-span-12 mt-12">
-            <h2 className="text-[0.7rem] font-bold uppercase tracking-[0.3em] text-white/40 mb-8 flex items-center gap-4">
+            <h2 className="text-[0.7rem] font-bold tracking-[0.3em] text-white/40 mb-8 flex items-center gap-4">
                Active Schematic Registry
                <div className="flex-1 h-[1px] bg-white/5"></div>
             </h2>
@@ -571,7 +571,7 @@ export default function AdminPage() {
               {isLoading && projects.length === 0 ? (
                 <div className="col-span-full p-20 text-center">
                    <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                   <span className="text-xs text-white/20 uppercase tracking-widest">Accessing Secure Logs...</span>
+                   <span className="text-xs text-white/20 tracking-widest">Accessing Secure Logs...</span>
                 </div>
               ) : (
                 <DndContext 
@@ -611,7 +611,7 @@ export default function AdminPage() {
               notification.type === 'error' ? 'bg-red-500' : 
               'bg-primary'}`}></div>
           <div className="flex flex-col">
-             <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-40 mb-0.5">System Message</span>
+             <span className="text-[0.6rem] font-bold tracking-widest opacity-40 mb-0.5">System Message</span>
              <p className="text-xs font-bold leading-tight tracking-wide">{notification.message}</p>
           </div>
           <div className="absolute bottom-0 left-0 h-[2px] bg-current opacity-20 w-full animate-toastProgress"></div>
@@ -636,13 +636,13 @@ export default function AdminPage() {
                     <div className="flex gap-4">
                         <button 
                             onClick={() => setDeleteId(null)}
-                            className="flex-1 py-3 bg-white/5 border border-white/10 text-white/60 font-headline font-bold rounded-xl text-[0.65rem] uppercase tracking-widest hover:bg-white/10 transition-all font-mono"
+                            className="flex-1 py-3 bg-white/5 border border-white/10 text-white/60 font-headline font-bold rounded-xl text-[0.65rem] tracking-widest hover:bg-white/10 transition-all font-mono"
                         >
                             Abort Process
                         </button>
                         <button 
                             onClick={handleDeleteConfirm}
-                            className="flex-1 py-3 bg-red-500/20 border border-red-500/50 text-red-400 font-headline font-bold rounded-xl text-[0.65rem] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                            className="flex-1 py-3 bg-red-500/20 border border-red-500/50 text-red-400 font-headline font-bold rounded-xl text-[0.65rem] tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-[0_0_20px_rgba(239,68,68,0.2)]"
                         >
                             Confirm Deletion
                         </button>
