@@ -1,86 +1,91 @@
-"use client";
+import Link from "next/link";
+import ContentLayout, { CtaBand, PageHero, Prose } from "@/components/seo/ContentLayout";
+import FaqSection from "@/components/seo/FaqSection";
+import { procurementFaqs } from "@/lib/seo/faqs";
+import { contactLinks } from "@/lib/seo/config";
+import { createPageMetadata } from "@/lib/seo/metadata";
 
-import { useEffect, useState } from "react";
+export const metadata = createPageMetadata({
+  title: "Procurement Software & Digitization Kenya",
+  description:
+    "Procurement software and digitization for Kenya—procure-to-pay, vendor management, ERP integration, and e-GP guidance by MichaelSoft.",
+  path: "/procurement",
+  swPath: "/sw/procurement",
+  keywords: [
+    "procurement software Kenya",
+    "procure to pay Kenya",
+    "vendor management software Kenya",
+    "procurement system East Africa",
+  ],
+});
 
 export default function ProcurementPage() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
-
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-body relative overflow-hidden flex flex-col items-center justify-center p-8">
-      {/* Background HUD Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,242,255,0.05)_0%,transparent_70%)] pointer-events-none"></div>
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+    <ContentLayout breadcrumbs={[{ label: "Procurement" }]} currentPath="/procurement">
+      <PageHero
+        eyebrow="Procurement · Kenya"
+        title="Procurement software & digitization for Kenya"
+        lead="MichaelSoft builds and integrates procurement workflows for private organizations—inventory, vendor reconciliation, approvals, and ERP sync—while helping teams navigate Kenya's e-Government Procurement (e-GP) landscape."
+      />
+      <Prose>
+        <p>
+          Public procurement in Kenya runs through{" "}
+          <a href="https://egpkenya.go.ke" target="_blank" rel="noopener noreferrer">
+            EGP-KENYA
+          </a>
+          . Private-sector procurement still needs digital requisitions, delegation of authority, purchase orders, and
+          audit trails—often connected to Sage, QuickBooks, or SAP.
+        </p>
+        <h2>Core capabilities</h2>
+        <ul>
+          <li>Inventory management and stock-triggered purchasing</li>
+          <li>Vendor master data and reconciliation</li>
+          <li>Multi-level approval workflows with audit logs</li>
+          <li>Dashboards for spend visibility and cycle times</li>
+          <li>AI-assisted policy and tender document review (human-approved)</li>
+        </ul>
+        <h2>Guides</h2>
+        <ul>
+          <li>
+            <Link href="/procurement/egp-kenya-guide">e-GP Kenya supplier & compliance guide</Link>
+          </li>
+          <li>
+            <Link href="/procurement/private-p2p-kenya">Private procure-to-pay (P2P) in Kenya</Link>
+          </li>
+        </ul>
+      </Prose>
 
-      <div className="max-w-4xl w-full relative z-10">
-        <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
-          <div>
-             <div className="flex items-center gap-2 mb-4 text-[#00ff88] text-[0.6rem] font-bold tracking-[0.3em]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse"></div>
-                Supply Chain Synchronization
-             </div>
-             <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight text-white italic">
-                Procurement<br/>Terminal 1.0
-             </h1>
-          </div>
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-xl">
-             <div className="text-[0.6rem] text-white/30 tracking-widest mb-1">Authorization Layer</div>
-             <div className="text-xs font-mono font-bold text-primary">MS-ERP-P01-2026</div>
-          </div>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 text-left">
-           <div className="space-y-6">
-              <p className="text-slate-400 text-sm leading-loose">
-                 The MichaelSoft Procurement Terminal integrates global inventory channels with automated logistics fulfillment. Currently scaling clusters in East Africa nodes.
-              </p>
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/20 transition-all">
-                 <h4 className="text-[0.65rem] font-bold text-white/40 tracking-widest mb-4">Core Modules</h4>
-                 <ul className="space-y-3">
-                    <li className="flex items-center gap-3 text-sm">
-                       <span className="w-1 h-1 rounded-full bg-primary/40"></span>
-                       Inventory Management
-                    </li>
-                    <li className="flex items-center gap-3 text-sm">
-                       <span className="w-1 h-1 rounded-full bg-primary/40"></span>
-                       Vendor Reconciliation
-                    </li>
-                    <li className="flex items-center gap-3 text-sm opacity-50">
-                       <span className="w-1 h-1 rounded-full bg-white/10"></span>
-                       Predictive Logistics (Coming Soon)
-                    </li>
-                 </ul>
-              </div>
-           </div>
-
-           <div className="flex flex-col justify-center items-center text-center p-8 border border-white/5 rounded-3xl bg-[radial-gradient(circle_at_50%_0%,rgba(0,242,255,0.1)_0%,transparent_100%)]">
-              <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mb-6">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-              </div>
-              <h3 className="text-lg font-headline font-bold mb-3 tracking-wider italic">Secure Portal</h3>
-              <p className="text-xs text-white/40 mb-8 max-w-xs leading-relaxed">
-                 Administrative access required to manage procurement schemas.
-              </p>
-              <button 
-                 onClick={() => alert("Access Denied: Cluster is currently initializing")}
-                 className="w-full bg-primary text-black font-headline font-bold py-3 rounded-lg text-[0.65rem] tracking-widest hover:bg-white transition-all shadow-[0_0_20px_rgba(0,242,255,0.3)]"
-              >
-                 Initialize Authentication
-              </button>
-           </div>
+      <div className="mt-10 grid md:grid-cols-2 gap-6">
+        <div className="p-8 rounded-2xl border border-white/10 bg-white/5">
+          <h2 className="font-headline text-sm font-bold text-white mb-4 tracking-widest">For government suppliers</h2>
+          <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+            Register on EGP-KENYA and keep internal quoting, delivery, and finance processes ready for audits.
+          </p>
+          <Link
+            href="/procurement/egp-kenya-guide"
+            className="text-primary text-[0.65rem] font-headline tracking-widest no-underline hover:underline"
+          >
+            Read e-GP guide →
+          </Link>
         </div>
-
-        <div className="flex justify-between items-center text-[0.6rem] text-white/20 tracking-widest_extra font-bold border-t border-white/5 pt-8">
-           <span>Session Status: Active</span>
-           <span>MichaelSoft Ecosystem &copy; 2026</span>
+        <div className="p-8 rounded-2xl border border-primary/20 bg-[radial-gradient(circle_at_50%_0%,rgba(0,242,255,0.08)_0%,transparent_70%)]">
+          <h2 className="font-headline text-sm font-bold text-white mb-4 tracking-widest">Request a discovery call</h2>
+          <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+            Discuss custom procurement portals, ERP integration, or AI agents for your team.
+          </p>
+          <a
+            href={contactLinks.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-primary text-black font-headline font-bold px-5 py-3 rounded-lg text-[0.65rem] tracking-widest hover:bg-white transition-all no-underline"
+          >
+            WhatsApp MichaelSoft
+          </a>
         </div>
       </div>
-    </div>
+
+      <FaqSection faqs={procurementFaqs} />
+      <CtaBand />
+    </ContentLayout>
   );
 }

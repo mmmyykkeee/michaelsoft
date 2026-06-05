@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Manrope, Playfair_Display } from "next/font/google";
+import Analytics from "@/components/seo/Analytics";
+import GlobalSchema from "@/components/seo/GlobalSchema";
+import { siteConfig } from "@/lib/seo/config";
+import { buildSiteVerificationMetadata } from "@/lib/seo/verification";
+import { absoluteUrl, createPageMetadata } from "@/lib/seo/metadata";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,11 +24,29 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "MichaelSoft | Coming Soon",
-  description: "MichaelSoft is architecting the next generation of digital infrastructure. A new era is surfacing.",
+  metadataBase: new URL(siteConfig.url),
+  ...createPageMetadata({
+    title: siteConfig.name,
+    description: siteConfig.tagline,
+    path: "/",
+    swPath: "/sw",
+    keywords: [
+      "custom software Kenya",
+      "AI agents Kenya",
+      "procurement software Kenya",
+      "product manager Nairobi",
+      "MichaelSoft",
+      "Michael Kembugua",
+    ],
+  }),
   icons: {
-    icon: "/favicon.png",
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: "/michaelsoft_bg.jpg",
   },
+  authors: [{ name: siteConfig.founder.name, url: absoluteUrl("/about") }],
+  creator: siteConfig.founder.name,
+  publisher: siteConfig.name,
+  verification: buildSiteVerificationMetadata(),
 };
 
 export default function RootLayout({
@@ -32,8 +55,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable} ${playfair.variable}`}>
+    <html lang="en-KE" className={`${inter.variable} ${manrope.variable} ${playfair.variable}`}>
       <body className="antialiased">
+        <Analytics />
+        <GlobalSchema />
         <div className="nebula-bg">
           <div className="orb orb-1"></div>
           <div className="orb orb-2"></div>
