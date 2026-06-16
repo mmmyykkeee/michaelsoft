@@ -15,8 +15,10 @@ export async function POST(req: NextRequest) {
     
     // Determine the base URL for redirects (handle subdomain correctly)
     const reqUrl = new URL(req.url);
-    const origin = reqUrl.origin;
-    const isSubdomain = reqUrl.hostname.startsWith("admin.");
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || reqUrl.hostname;
+    const proto = req.headers.get("x-forwarded-proto") || reqUrl.protocol.replace(":", "");
+    const origin = `${proto}://${host}`;
+    const isSubdomain = host.startsWith("admin.");
 
     if (!email || !password) {
       return NextResponse.redirect(
