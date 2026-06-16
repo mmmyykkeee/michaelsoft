@@ -25,6 +25,10 @@ export default async function middleware(req: NextRequest) {
   const isRootDomain = hostname === rootDomain || hostname === "localhost:3002" || hostname === "127.0.0.1:3002";
   
   if (isRootDomain) {
+    if (path.startsWith("/admin")) {
+      const adminUrl = new URL(`https://admin.${rootDomain}${path}`);
+      return NextResponse.redirect(adminUrl, { status: 301 });
+    }
     return NextResponse.next();
   }
 
