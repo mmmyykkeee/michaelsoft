@@ -1,26 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Manrope, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-body",
 });
 
-const manrope = Manrope({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  variable: "--font-headline",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  style: ["italic", "normal"],
-  variable: "--font-accent",
 });
 
 export const metadata: Metadata = {
-  title: "MichaelSoft | Coming Soon",
-  description: "MichaelSoft is architecting the next generation of digital infrastructure. A new era is surfacing.",
+  title: "MichaelSoft",
+  description: "MichaelSoft — architecting the next generation of digital infrastructure.",
   icons: {
     icon: "/favicon.png",
   },
@@ -32,15 +26,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable} ${playfair.variable}`}>
-      <body className="antialiased">
-        <div className="nebula-bg">
-          <div className="orb orb-1"></div>
-          <div className="orb orb-2"></div>
-          <div className="orb orb-3"></div>
-        </div>
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+                  document.documentElement.classList.add("dark");
+                }
+              } catch(e){}
+            `,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

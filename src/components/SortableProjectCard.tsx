@@ -23,13 +23,12 @@ interface SortableProjectCardProps {
   onTogglePin: (project: Project) => void;
 }
 
-export function SortableProjectCard({ 
-  project, 
-  onEdit, 
-  onDelete, 
-  onTogglePin 
+export function SortableProjectCard({
+  project,
+  onEdit,
+  onDelete,
+  onTogglePin,
 }: SortableProjectCardProps) {
-  // Stable cache buster — set once on mount to avoid re-fetching on every render
   const cacheBuster = useRef(Date.now());
 
   const {
@@ -38,98 +37,133 @@ export function SortableProjectCard({
     setNodeRef,
     transform,
     transition,
-    isDragging
+    isDragging,
   } = useSortable({ id: project.id! });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 50 : "auto",
-    opacity: isDragging ? 0.6 : 1,
+    opacity: isDragging ? 0.5 : 1,
   };
 
   const technologies = (() => {
     try {
       return (JSON.parse(project.technologies) as string[]) || [];
-    } catch (e) {
+    } catch {
       return [];
     }
   })();
 
   return (
-    <div 
-      ref={setNodeRef} 
+    <div
+      ref={setNodeRef}
       style={style}
-      className={`group p-8 border-b border-white/5 hover:bg-white/[0.02] transition-all flex items-start gap-8 relative overflow-hidden ${isDragging ? 'shadow-2xl shadow-primary/20 bg-white/[0.05]' : ''}`}
+      className={`group flex items-start gap-4 px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors ${
+        isDragging
+          ? "bg-white dark:bg-neutral-900 shadow-lg rounded-lg"
+          : ""
+      }`}
     >
-      {/* Drag Handle */}
-      <div 
-        {...attributes} 
-        {...listeners} 
-        className="cursor-grab active:cursor-grabbing p-2 text-white/20 hover:text-primary transition-colors flex-shrink-0"
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing p-1 text-neutral-300 dark:text-neutral-600 hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors flex-shrink-0 mt-1"
       >
-        <GripVertical size={20} />
+        <GripVertical size={16} />
       </div>
 
-      {/* Hover Glow */}
-      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-      
-      <div className="w-32 h-32 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-white/10 flex-shrink-0 relative z-10 bg-black/40">
+      <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex-shrink-0">
         {project.thumbnail ? (
-          <img src={`${project.thumbnail}?cb=${cacheBuster.current}`} alt={project.name} className="w-full h-full object-cover" />
+          <img
+            src={`${project.thumbnail}?cb=${cacheBuster.current}`}
+            alt={project.name}
+            className="w-full h-full object-cover"
+          />
         ) : (
-          <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/10">
-             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          <div className="w-full h-full flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-neutral-300 dark:text-neutral-600"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+            </svg>
           </div>
         )}
       </div>
-      
-      <div className="flex-1 relative z-10">
-        <div className="flex justify-between items-start">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-               <h3 className="font-headline font-bold text-2xl text-white group-hover:text-primary transition-colors tracking-tight italic">{project.name}</h3>
-               {project.featured && (
-                 <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[0.5rem] font-bold tracking-widest border border-primary/20 flex items-center gap-1">
-                   <Pin size={8} className="fill-current" />
-                   Pinned
-                 </span>
-               )}
-            </div>
-            <span className="text-[0.6rem] text-slate-500 font-mono tracking-widest">{project.link}</span>
-          </div>
-          <div className="flex gap-2">
-            <button 
-              onClick={() => onTogglePin(project)}
-              className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all ${project.featured ? 'text-primary border-primary/50' : 'text-white/40 hover:text-white'}`}
-              title={project.featured ? "Unpin Project" : "Pin Project"}
-            >
-              {project.featured ? <Pin size={16} className="fill-current" /> : <PinOff size={16} />}
-            </button>
-            <button 
-              onClick={() => onEdit(project)}
-              className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-primary/50 transition-all flex items-center justify-center"
-              title="Edit Project"
-            >
-              <Pencil size={16} />
-            </button>
-            <button 
-              onClick={() => project.id && onDelete(project.id)}
-              className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-red-400 hover:border-red-400/50 transition-all flex items-center justify-center"
-              title="Delete Project"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+            {project.name}
+          </h3>
+          {project.featured && (
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.6rem] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400">
+              <Pin size={8} />
+              Pinned
+            </span>
+          )}
         </div>
-        <p className="mt-4 text-slate-400 font-medium text-xs leading-relaxed line-clamp-2 max-w-lg">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate mb-2">
+          {project.link}
+        </p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1">
           {project.description}
         </p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {technologies.map(t => (
-            <span key={t} className="text-[0.55rem] font-bold tracking-[0.2em] text-white/30">{t}</span>
-          ))}
-        </div>
+        {technologies.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {technologies.slice(0, 3).map((t) => (
+              <span
+                key={t}
+                className="text-[0.6rem] text-neutral-400 dark:text-neutral-500"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-1 flex-shrink-0">
+        <button
+          onClick={() => onTogglePin(project)}
+          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${
+            project.featured
+              ? "text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800"
+              : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          }`}
+          title={project.featured ? "Unpin" : "Pin"}
+        >
+          {project.featured ? (
+            <Pin size={14} className="fill-current" />
+          ) : (
+            <PinOff size={14} />
+          )}
+        </button>
+        <button
+          onClick={() => onEdit(project)}
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+          title="Edit"
+        >
+          <Pencil size={14} />
+        </button>
+        <button
+          onClick={() => project.id && onDelete(project.id)}
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors cursor-pointer"
+          title="Delete"
+        >
+          <Trash2 size={14} />
+        </button>
       </div>
     </div>
   );

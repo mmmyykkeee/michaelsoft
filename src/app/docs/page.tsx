@@ -1,76 +1,113 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 export default function DocsPage() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
-
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-body relative overflow-hidden flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 flex flex-col md:flex-row">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/5 p-8 bg-black/20 backdrop-blur-xl z-20">
-         <div className="mb-10 font-headline font-bold text-xs tracking-widest flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-primary/20 flex items-center justify-center border border-primary/40 text-[0.6rem] text-primary">D</div>
-            Docs 1.0
-         </div>
+      <aside className="w-full md:w-56 border-b md:border-b-0 md:border-r border-neutral-100 dark:border-neutral-800 p-6 md:p-8 md:sticky md:top-0 md:h-screen">
+        <div className="mb-8">
+          <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+            MichaelSoft
+          </span>
+          <span className="text-neutral-300 dark:text-neutral-600 mx-2">
+            /
+          </span>
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            Docs
+          </span>
+        </div>
 
-         <nav className="space-y-6">
-            <div>
-               <h4 className="text-[0.65rem] font-bold text-white/40 tracking-widest mb-3">Getting Started</h4>
-               <ul className="space-y-2">
-                  <li className="text-sm text-primary font-medium cursor-pointer">Quickstart</li>
-                  <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Architecture</li>
-               </ul>
-            </div>
-            <div>
-               <h4 className="text-[0.65rem] font-bold text-white/40 tracking-widest mb-3">Core Modules</h4>
-               <ul className="space-y-2">
-                  <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Nebula OS</li>
-                  <li className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">Data Sync</li>
-               </ul>
-            </div>
-         </nav>
+        <nav className="space-y-6">
+          <div>
+            <h4 className="text-xs font-medium text-neutral-400 dark:text-neutral-500 mb-2">
+              Getting Started
+            </h4>
+            <ul className="space-y-1">
+              <li>
+                <span className="text-sm text-neutral-900 dark:text-neutral-100 font-medium cursor-default">
+                  Quickstart
+                </span>
+              </li>
+              <li>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer">
+                  Architecture
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-xs font-medium text-neutral-400 dark:text-neutral-500 mb-2">
+              Core Modules
+            </h4>
+            <ul className="space-y-1">
+              <li>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer">
+                  Nebula OS
+                </span>
+              </li>
+              <li>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors cursor-pointer">
+                  Data Sync
+                </span>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </aside>
 
-      <main className="flex-1 p-8 md:p-16 relative z-10 max-w-4xl mx-auto overflow-y-auto">
-        <header className="mb-16">
-          <h1 className="font-headline text-5xl font-extrabold tracking-tight mb-4 text-white italic">
-            Documentation
-          </h1>
-          <p className="text-slate-400 text-lg">
-            Technical specifications and implementation guides for the MichaelSoft ecosystem.
-          </p>
-        </header>
+      {/* Content */}
+      <main className="flex-1 p-8 md:p-16 max-w-3xl">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 mb-3">
+          Documentation
+        </h1>
+        <p className="text-neutral-500 dark:text-neutral-400 text-base mb-12">
+          Technical specifications and implementation guides for the
+          MichaelSoft ecosystem.
+        </p>
 
-        <section className="prose prose-invert max-w-none">
-           <h2 className="text-2xl font-bold mb-4 text-white">Introduction</h2>
-           <p className="text-slate-400 mb-8 leading-relaxed">
-             MichaelSoft is building a unified digital substrate. Our documentation provides the primitives needed to integrate with our upcoming infrastructure.
-           </p>
+        <div className="space-y-10">
+          <section>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+              Introduction
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              MichaelSoft is building a unified digital substrate. Our
+              documentation provides the primitives needed to integrate with our
+              upcoming infrastructure.
+            </p>
+          </section>
 
-           <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 mb-12">
-              <h3 className="text-primary font-bold mb-2">Notice</h3>
-              <p className="text-primary/70 text-sm">
-                This documentation is currently in pre-alpha. Specifications are subject to change as the infrastructure matures.
-              </p>
-           </div>
+          <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-5">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              This documentation is currently in pre-alpha. Specifications are
+              subject to change as the infrastructure matures.
+            </p>
+          </div>
 
-           <h2 className="text-2xl font-bold mb-4 text-white">Core Philosophy</h2>
-           <p className="text-slate-400 mb-4 leading-relaxed">
-             We believe software should be as resilient as biological systems. Every module in the MichaelSoft stack is designed with:
-           </p>
-           <ul className="list-disc list-inside text-slate-400 space-y-2 mb-8">
-              <li>Self-healing capabilities</li>
-              <li>Atmospheric scalability</li>
-              <li>Invisible synchronization</li>
-           </ul>
-        </section>
+          <section>
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
+              Core Philosophy
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+              We believe software should be as resilient as biological systems.
+              Every module in the MichaelSoft stack is designed with:
+            </p>
+            <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
+              <li className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-neutral-400" />
+                Self-healing capabilities
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-neutral-400" />
+                Atmospheric scalability
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1 h-1 rounded-full bg-neutral-400" />
+                Invisible synchronization
+              </li>
+            </ul>
+          </section>
+        </div>
       </main>
     </div>
   );
