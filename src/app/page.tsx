@@ -59,9 +59,17 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      {/* Background */}
+      <div className="nebula-bg" />
+      
+      {/* Animated orbs */}
+      <div className="orb orb-1 absolute pointer-events-none" />
+      <div className="orb orb-2 absolute pointer-events-none" />
+      <div className="orb orb-3 absolute pointer-events-none" />
+
       {/* Nav */}
-      <nav className="border-b border-neutral-100 dark:border-neutral-800">
+      <nav className="border-b border-white/10">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Image
@@ -71,25 +79,25 @@ export default function Home() {
               height={24}
               className="rounded"
             />
-            <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+            <span className="text-sm font-medium text-white">
               MichaelSoft
             </span>
           </div>
           <div className="flex items-center gap-6">
             <Link
               href="/projects"
-              className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors duration-200"
+              className="text-sm text-white/60 hover:text-white transition-colors duration-200"
             >
               Projects
             </Link>
             <button
               onClick={() => setContactOpen(!contactOpen)}
-              className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors duration-200 cursor-pointer relative"
+              className="text-sm text-white/60 hover:text-white transition-colors duration-200 cursor-pointer relative"
             >
               Contact
               <div
                 ref={desktopContactRef}
-                className={`absolute top-[calc(100%+0.75rem)] right-0 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-2 min-w-[200px] shadow-lg transition-all duration-200 ${
+                className={`absolute top-[calc(100%+0.75rem)] right-0 bg-[#0a0f13]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 min-w-[200px] shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-200 ${
                   contactOpen
                     ? "opacity-100 scale-100 translate-y-0"
                     : "opacity-0 scale-95 translate-y-2 pointer-events-none"
@@ -97,7 +105,7 @@ export default function Home() {
               >
                 <a
                   href="tel:+254704472009"
-                  className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                  className="flex items-center gap-2 text-sm text-white/70 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +124,7 @@ export default function Home() {
                 </a>
                 <a
                   href="mailto:0mykembugua@gmail.com"
-                  className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                  className="flex items-center gap-2 text-sm text-white/70 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +146,7 @@ export default function Home() {
                   href="https://api.whatsapp.com/send?phone=254704472009"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                  className="flex items-center gap-2 text-sm text-white/70 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -164,13 +172,13 @@ export default function Home() {
       {/* Hero */}
       <main className="flex-1 flex items-center justify-center px-6">
         <div className="max-w-4xl text-center">
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-white leading-tight">
             MichaelSoft
           </h1>
-          <p className="mt-4 text-lg text-neutral-500 dark:text-neutral-400">
+          <p className="mt-4 text-lg text-white/60">
             Coming Soon
           </p>
-          <p className="mt-5 text-neutral-500 dark:text-neutral-400 text-base leading-relaxed max-w-xl mx-auto">
+          <p className="mt-5 text-white/50 text-base leading-relaxed max-w-xl mx-auto">
             We&apos;re architecting the next generation of digital
             infrastructure. A new era of MichaelSoft is surfacing.
           </p>
@@ -178,13 +186,13 @@ export default function Home() {
           <div className="mt-10 flex items-center justify-center gap-3">
             <Link
               href="/projects"
-              className="px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-medium rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-200 active:scale-[0.97] transition-all duration-200"
+              className="px-5 py-2.5 bg-white text-neutral-900 text-sm font-medium rounded-lg hover:bg-white/90 active:scale-[0.97] transition-all duration-200"
             >
               View Projects
             </Link>
             <button
               onClick={() => setContactOpen(true)}
-              className="px-5 py-2.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-neutral-300 dark:hover:border-neutral-600 active:scale-[0.97] transition-all duration-200 cursor-pointer"
+              className="px-5 py-2.5 text-sm text-white/70 hover:text-white border border-white/20 rounded-lg hover:border-white/40 active:scale-[0.97] transition-all duration-200 cursor-pointer"
             >
               Get in Touch
             </button>
@@ -193,8 +201,8 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-100 dark:border-neutral-800 py-6">
-        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
+      <footer className="border-t border-white/10 py-6">
+        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between text-xs text-white/40">
           <span>MICHAELSOFT</span>
           <span>&copy; {new Date().getFullYear()} MichaelSoft. All rights reserved.</span>
         </div>

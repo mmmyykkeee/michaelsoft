@@ -25,6 +25,48 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* --- Atmospheric Background --- */
+.nebula-bg {
+  @apply fixed inset-0 z-[-1] overflow-hidden pointer-events-none;
+  background-image: 
+    linear-gradient(rgba(10, 15, 19, 0.9), rgba(10, 15, 19, 0.95)),
+    url('/michaelsoft_bg_new.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+}
+
+.orb {
+  @apply absolute rounded-full opacity-25 transition-transform duration-500 ease-out;
+  filter: blur(120px);
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #00f2ff 0%, transparent 70%);
+  top: 10%;
+  left: -15%;
+}
+
+.orb-2 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, #7000ff 0%, transparent 70%);
+  bottom: -20%;
+  right: -10%;
+}
+
+.orb-3 {
+  width: 400px;
+  height: 400px;
+  background: #ff00d4;
+  top: 50%;
+  left: 60%;
+  opacity: 0.2;
+}
+
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }
